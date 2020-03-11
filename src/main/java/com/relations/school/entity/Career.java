@@ -1,30 +1,35 @@
 package com.relations.school.entity;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "career")
-public class Career
+public class Career implements Serializable 
 {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	@Column(name="name")
-	private String name;
+	private String name;	
 	
-	@OneToMany(mappedBy = "career", cascade = CascadeType.ALL)
-	private Set<Student> students;
-
+	/*@OneToMany(mappedBy = "career")
+    private List<Student> students;*/
+	
 	public Career() {
 		     
 	}

@@ -1,7 +1,11 @@
 package com.relations.school.entity;
 
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,7 +15,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "student")
-public class Student
+public class Student implements Serializable 
 {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,18 +26,12 @@ public class Student
     
     @Column(name="age")
     private int age;
-    
-    @ManyToOne
-    @JoinColumn
+      
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="career_id", referencedColumnName = "id")
     private Career career;
-    
-    public Student() { }
-    
-	public Student(String name, int age) {
-		super();		
-		this.name = name;
-		this.age = age;
-	}
+
+	public Student() { }   
 
 	public Long getId() {
 		return id;
@@ -57,6 +55,14 @@ public class Student
 
 	public void setAge(int age) {
 		this.age = age;
+	}
+	
+	public Career getCareer() {
+		return career;
+	}
+
+	public void setCareer(Career career) {
+		this.career = career;
 	}
 
 	@Override
