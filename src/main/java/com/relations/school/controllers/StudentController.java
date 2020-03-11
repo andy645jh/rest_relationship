@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.relations.school.entity.Career;
 import com.relations.school.entity.Student;
+import com.relations.school.services.ICareerService;
 import com.relations.school.services.IStudentService;
 
 @RestController
@@ -22,6 +25,9 @@ public class StudentController {
 
 	@Autowired
 	private IStudentService studentService;
+	
+	@Autowired
+	private ICareerService careerService;
 
 	@RequestMapping(value = "/students", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Student> findAll(Model model) {
@@ -56,14 +62,17 @@ public class StudentController {
 			studentService.deleteId(id);
 			return new ResponseEntity<>("Data deleted successfully", HttpStatus.ACCEPTED);
 		} catch (Exception e) {
-			return new ResponseEntity<>("Resource not found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Resource not found: "+e.toString(), HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@RequestMapping(value = "/students/", method = RequestMethod.PUT)
-	public ResponseEntity<?> createPersona(@RequestBody Student student) {
-
+	@RequestMapping(value = "/{careerId}/students/", method = RequestMethod.PUT)
+	public ResponseEntity<?> createPersona(@RequestBody Student student, @PathVariable Long careerId) {
+		
+		Career career = careerService.findId(careerId);
+		student.setCareer(career);
 		Student p = studentService.save(student);
+		
 		if (p != null) {
 			return new ResponseEntity<>("Data created successfully", HttpStatus.ACCEPTED);
 		}
