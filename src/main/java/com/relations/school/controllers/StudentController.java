@@ -47,6 +47,7 @@ public class StudentController {
 		if (newStudent != null) {
 			newStudent.setName(student.getName());		
 			newStudent.setAge(student.getAge());
+			newStudent.setCareer(student.getCareer());
 			Student pSaved = studentService.save(newStudent);
 			if (pSaved.equals(newStudent)) {
 				return new ResponseEntity<>("Data updated successfully", HttpStatus.OK);
